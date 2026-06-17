@@ -369,32 +369,68 @@ function handleCredentialResponse(response){
 
 
 <style>
-#gameSearch{padding:8px;margin:10px}
-.catBtn{padding:6px 10px;margin:3px;cursor:pointer}
+#sideMenu{position:fixed;left:-260px;top:0;width:250px;height:100%;background:#222;color:white;padding:15px;transition:.3s;z-index:9999}
+#sideMenu.open{left:0}
+#menuBtn{position:fixed;top:10px;left:10px;font-size:28px;cursor:pointer;z-index:10000}
+#profileBox input{margin:5px;padding:5px}
 </style>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
- const s=document.getElementById('gameSearch');
- if(s){
-  s.addEventListener('input',()=>{
-   document.querySelectorAll('.game-card,.game').forEach(g=>{
-    g.style.display=g.textContent.toLowerCase().includes(s.value.toLowerCase())?'':'none';
-   });
-  });
- }
-});
-function calcMath(){
- const v=document.getElementById('mathInput').value;
- try{document.getElementById('mathOut').innerText=eval(v);}
- catch(e){document.getElementById('mathOut').innerText='Fehler';}
-}
-</script>
-<div style="padding:10px;text-align:center">
-<h3>Mathe-KI</h3>
-<input id="mathInput" placeholder="2+2*5">
-<button onclick="calcMath()">Berechnen</button>
-<div id="mathOut"></div>
+
+<div id="menuBtn" onclick="toggleMenu()">☰</div>
+
+<div id="sideMenu">
+<h2>The Game</h2>
+<button onclick="toggleMenu()">Schließen</button>
+<hr>
+<input id="gameSearch2" placeholder="🔍 Suche"><br><br>
+
+<h3>👤 Profil</h3>
+<div id="profileBox">
+<input id="username" placeholder="Benutzername">
+<button onclick="saveUser()">Speichern</button>
+<p id="savedUser"></p>
 </div>
 
+<h3>🤖 Mathe-KI</h3>
+<input id="mathMenu" placeholder="z.B. 5*5">
+<button onclick="calcMenu()">OK</button>
+<div id="mathResult"></div>
+
+<hr>
+<div id="googleArea">
+<p>Google Login eingerichtet</p>
+</div>
+
+<button onclick="logoutUser()">🚪 Abmelden</button>
+</div>
+
+<script>
+function toggleMenu(){
+ document.getElementById('sideMenu').classList.toggle('open');
+}
+
+function saveUser(){
+ let n=document.getElementById('username').value;
+ localStorage.setItem('thegame_user',n);
+ document.getElementById('savedUser').innerText='👤 '+n;
+}
+
+window.addEventListener('load',()=>{
+ let n=localStorage.getItem('thegame_user');
+ if(n) document.getElementById('savedUser').innerText='👤 '+n;
+});
+
+function logoutUser(){
+ localStorage.removeItem('thegame_user');
+ document.getElementById('savedUser').innerText='Abgemeldet';
+}
+
+function calcMenu(){
+ try{
+  document.getElementById('mathResult').innerText=eval(document.getElementById('mathMenu').value);
+ }catch(e){
+  document.getElementById('mathResult').innerText='Fehler';
+ }
+}
+</script>
 </body>
 </html>
