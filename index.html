@@ -1,791 +1,400 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpielePortal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #07060f;
-      --surface: #0f0e1e;
-      --surface2: #181629;
-      --border: rgba(255,255,255,0.07);
-      --accent: #7b5ea7;
-      --accent2: #c45cff;
-      --neon: #a78bfa;
-      --text: #f0eeff;
-      --muted: #8880aa;
-      --radius: 14px;
-      --card-radius: 18px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheGame</title>
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
 
-    html { scroll-behavior: smooth; }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+body{
+background:#0f0f0f;
+color:white;
+font-family:Arial;
+}
 
-    /* ====== BACKGROUND GRID ====== */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(123,94,167,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(123,94,167,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
+/* HEADER */
 
-    /* ====== HEADER ====== */
-    header {
-      position: relative;
-      z-index: 10;
-      padding: 3.5rem 2rem 2.5rem;
-      text-align: center;
-    }
+.header{
+background:#1a1a1a;
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
 
-    .logo-glow {
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 500px;
-      height: 300px;
-      background: radial-gradient(ellipse, rgba(167,139,250,0.18) 0%, transparent 70%);
-      pointer-events: none;
-    }
+.logo{
+color:#ff6b6b;
+font-size:24px;
+font-weight:bold;
+}
 
-    .logo-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(167,139,250,0.1);
-      border: 1px solid rgba(167,139,250,0.25);
-      border-radius: 50px;
-      padding: 6px 16px;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--neon);
-      margin-bottom: 1.2rem;
-    }
+/* HERO */
 
-    .logo-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--neon);
-      animation: pulse 2s ease-in-out infinite;
-    }
+.hero{
+background:linear-gradient(135deg,#ff6b6b,#ff8787);
+padding:40px;
+text-align:center;
+}
 
-    @keyframes pulse {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.7); }
-    }
+/* MAIN */
 
-    h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5rem);
-      font-weight: 800;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 30%, var(--neon) 70%, #c45cff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.8rem;
-    }
+.main-wrapper{
+padding:20px;
+max-width:1200px;
+margin:auto;
+}
 
-    .subtitle {
-      font-size: 1rem;
-      color: var(--muted);
-      font-weight: 300;
-      letter-spacing: 0.02em;
-    }
+/* GRID */
 
-    /* ====== SEARCH ====== */
-    .search-wrap {
-      position: relative;
-      z-index: 10;
-      max-width: 560px;
-      margin: 1.5rem auto 0;
-    }
+.games-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+}
 
-    .search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      font-size: 1.1rem;
-      pointer-events: none;
-    }
+/* GAME CARD */
 
-    #search {
-      width: 100%;
-      padding: 15px 20px 15px 48px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      font-size: 1rem;
-      font-family: 'DM Sans', sans-serif;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s;
-    }
+.game-card{
+background:#1a1a1a;
+padding:15px;
+border-radius:10px;
+border:1px solid #333;
+cursor:pointer;
+transition:0.3s;
+}
 
-    #search::placeholder { color: var(--muted); }
+.game-card:hover{
+transform:translateY(-5px);
+border-color:#ff6b6b;
+}
 
-    #search:focus {
-      border-color: rgba(167,139,250,0.5);
-      box-shadow: 0 0 0 4px rgba(167,139,250,0.1);
-    }
+/* GAME IMAGE */
 
-    /* ====== CATEGORY NAV ====== */
-    #category-nav {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      padding: 1.8rem 2rem;
-    }
+.game-image{
+width:100%;
+height:140px;
+object-fit:cover;
+border-radius:8px;
+margin-bottom:10px;
+}
 
-    .cat-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+/* BUTTON */
 
-    .cat-btn .icon { font-size: 1.1rem; }
+.play-btn{
+margin-top:10px;
+width:100%;
+padding:10px;
+background:#ff6b6b;
+border:none;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
 
-    .cat-btn:hover {
-      border-color: rgba(167,139,250,0.4);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
+/* MODAL */
 
-    .cat-btn.active {
-      background: rgba(167,139,250,0.15);
-      border-color: rgba(167,139,250,0.6);
-      color: var(--neon);
-    }
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+}
 
-    .cat-count {
-      background: rgba(167,139,250,0.12);
-      border-radius: 20px;
-      padding: 2px 8px;
-      font-size: 0.75rem;
-      color: var(--neon);
-    }
+.modal-content{
+width:90%;
+height:90%;
+margin:auto;
+margin-top:2%;
+position:relative;
+}
 
-    .cat-btn.active .cat-count {
-      background: rgba(167,139,250,0.25);
-    }
+.close-btn{
+position:absolute;
+right:10px;
+top:10px;
+background:red;
+border:none;
+color:white;
+padding:10px;
+cursor:pointer;
+}
 
-    /* ====== STATS BAR ====== */
-    .stats-bar {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 0 2rem 1.5rem;
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    .stat-item { display: flex; align-items: center; gap: 6px; }
-    .stat-num { color: var(--text); font-weight: 500; }
-
-    /* ====== GAMES GRID ====== */
-    #portal {
-      position: relative;
-      z-index: 10;
-    }
-
-    #games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 0 2rem 4rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    /* ====== GAME CARD ====== */
-    .game-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-      position: relative;
-      animation: fadeUp 0.4s ease both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .game-card:hover {
-      transform: translateY(-5px) scale(1.015);
-      border-color: rgba(167,139,250,0.4);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(167,139,250,0.15);
-    }
-
-    .card-thumb {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      display: block;
-      background: var(--surface2);
-    }
-
-    .card-thumb-placeholder {
-      width: 100%;
-      height: 170px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      background: var(--surface2);
-    }
-
-    .card-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(7,6,15,0.75);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 4px 10px;
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .card-body {
-      padding: 16px 18px 18px;
-    }
-
-    .card-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: var(--text);
-    }
-
-    .card-meta {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .play-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 11px;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .play-btn:hover { opacity: 0.9; transform: scale(0.98); }
-    .play-btn svg { width: 15px; height: 15px; }
-
-    /* ====== EMPTY STATE ====== */
-    .empty-state {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--muted);
-    }
-    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .empty-state h3 { font-family: 'Syne', sans-serif; color: var(--text); margin-bottom: 0.5rem; }
-
-    /* ====== GAME VIEWER ====== */
-    #game-viewer {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #000;
-      z-index: 1000;
-      flex-direction: column;
-    }
-
-    #game-viewer.open { display: flex; }
-
-    #viewer-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    #viewer-bar-left { display: flex; align-items: center; gap: 14px; }
-
-    #close-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    #close-btn:hover { background: rgba(255,255,255,0.12); }
-
-    #viewer-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    #open-tab-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 18px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    #viewer-notice {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0.75rem 1.5rem;
-      background: rgba(167,139,250,0.07);
-      border-bottom: 1px solid rgba(167,139,250,0.15);
-      font-size: 0.82rem;
-      color: var(--muted);
-      flex-shrink: 0;
-    }
-
-    #viewer-notice strong { color: var(--neon); }
-
-    #viewer-iframe-wrap {
-      flex: 1;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #game-iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    #iframe-blocker {
-      position: absolute;
-      inset: 0;
-      background: var(--surface);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.2rem;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .blocker-icon { font-size: 3.5rem; }
-    .blocker-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-
-    .blocker-desc {
-      color: var(--muted);
-      max-width: 400px;
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    .blocker-open {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 28px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 12px;
-      color: #fff;
-      text-decoration: none;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: opacity 0.2s;
-    }
-
-    .blocker-open:hover { opacity: 0.88; }
-
-    /* ====== SECTION TITLES ====== */
-    .section-label {
-      position: relative;
-      z-index: 10;
-      padding: 0 2rem 1rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .section-label h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .section-label p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ====== FOOTER ====== */
-    footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 2rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    /* ====== SCROLLBAR ====== */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 600px) {
-      header { padding: 2.5rem 1rem 1.5rem; }
-      #games-grid { padding: 0 1rem 3rem; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-      #category-nav { padding: 1rem; gap: 8px; }
-      .cat-btn { padding: 8px 14px; font-size: 0.82rem; }
-      .stats-bar { gap: 1rem; }
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo-glow"></div>
-    <div class="logo-badge"><span class="logo-dot"></span> HTML5 Spiele</div>
-    <h1>SpielePortal</h1>
-    <p class="subtitle">Über 35 Spiele in 5 Kategorien — kostenlos & sofort spielbar</p>
+<header class="header">
+<div class="logo">🎮🕹️ TheGame</div>
+</header>
 
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="search" placeholder="Spiele suchen..." autocomplete="off">
-    </div>
-  </header>
+<section class="hero">
+<h1>Willkommen zu TheGame</h1>
+</section>
 
-  <!-- CATEGORY NAV -->
-  <nav id="category-nav"></nav>
+<div class="main-wrapper">
+<div id="gamesContainer" class="games-grid"></div>
+</div>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-item">🎮 <span class="stat-num" id="stat-visible">36</span> Spiele</div>
-    <div class="stat-item">🗂️ <span class="stat-num">5</span> Kategorien</div>
-    <div class="stat-item">⚡ Kein Download nötig</div>
-  </div>
+<!-- MODAL -->
 
-  <!-- PORTAL -->
-  <div id="portal">
-    <div class="section-label">
-      <h2 id="section-title">Alle Spiele</h2>
-      <p id="section-sub">Klicke auf ein Spiel, um es sofort zu starten</p>
-    </div>
-    <div id="games-grid"></div>
-  </div>
+<div id="gameModal" class="modal">
+<div class="modal-content">
+<button id="closeGame" class="close-btn">X</button>
+<div id="gameDetail" style="width:100%;height:100%;"></div>
+</div>
+</div>
 
-  <!-- GAME VIEWER -->
-  <div id="game-viewer">
-    <div id="viewer-bar">
-      <div id="viewer-bar-left">
-        <button id="close-btn">← Zurück</button>
-        <span id="viewer-title"></span>
-      </div>
-      <a id="open-tab-btn" href="#" target="_blank" rel="noopener">↗ Im neuen Tab öffnen</a>
-    </div>
-    <div id="viewer-notice">
-      <strong>Hinweis:</strong> Falls das Spiel nicht lädt, nutze den Button oben rechts — manche Seiten blockieren Einbettungen.
-    </div>
-    <div id="viewer-iframe-wrap">
-      <iframe id="game-iframe" allowfullscreen allow="fullscreen; autoplay"></iframe>
-      <div id="iframe-blocker" style="display:none">
-        <div class="blocker-icon">🚫</div>
-        <div class="blocker-title">Einbettung nicht möglich</div>
-        <div class="blocker-desc">Diese Seite erlaubt leider keine Einbettung. Klicke unten, um das Spiel direkt in einem neuen Tab zu spielen.</div>
-        <a id="blocker-link" href="#" target="_blank" class="blocker-open">🎮 Spiel starten</a>
-      </div>
-    </div>
-  </div>
+<script>
 
-  <!-- FOOTER -->
-  <footer>SpielePortal &mdash; Alle Spiele werden von externen Quellen geladen</footer>
+// =====================
+// SPIELE LISTE
+// =====================
 
-  <script>
-    const CATEGORIES = [
-      { id: "Arcade",    icon: "🕹️",  label: "Arcade" },
-      { id: "Puzzle",    icon: "🧩",  label: "Puzzle" },
-      { id: "Racing",    icon: "🏎️",  label: "Racing" },
-      { id: "Action",    icon: "⚔️",  label: "Action" },
-      { id: "Adventure", icon: "🗺️", label: "Adventure" }
-    ];
+const games = [
 
-    const GAMES = [
-      // ARCADE
-      { title: "Flappy Bird",      cat: "Arcade",    icon: "🐦", url: "https://flappybird.io" },
-      { title: "Snake",            cat: "Arcade",    icon: "🐍", url: "https://www.google.com/fbx?fbx=snake" },
-      { title: "Pac-Man",          cat: "Arcade",    icon: "👾", url: "https://freepacman.org" },
-      { title: "Subway Surfers",   cat: "Arcade",    icon: "🚇", url: "https://poki.com/en/g/subway-surfers" },
-      { title: "Temple Run 2",     cat: "Arcade",    icon: "🏃", url: "https://poki.com/en/g/temple-run-2" },
-      { title: "Geometry Dash",    cat: "Arcade",    icon: "🔷", url: "https://poki.com/en/g/geometry-dash" },
-      { title: "Stack Ball",       cat: "Arcade",    icon: "🔴", url: "https://poki.com/en/g/stack-ball" },
-      { title: "Helix Jump",       cat: "Arcade",    icon: "🌀", url: "https://poki.com/en/g/helix-jump" },
-      { title: "Color Switch",     cat: "Arcade",    icon: "🎨", url: "https://poki.com/en/g/color-switch" },
+{
+title:"Ultimate Car Driving Simulator",
+category:"racing",
+url:"https://www.madkidgames.com/full/ultimate-car-driving-simulator",
+image:"data:image/jpeg;base64,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"
+},
 
-      // PUZZLE
-      { title: "2048",             cat: "Puzzle",    icon: "🔢", url: "https://play2048.co" },
-      { title: "Tetris",           cat: "Puzzle",    icon: "📦", url: "https://tetris.com/play-tetris" },
-      { title: "Sudoku",           cat: "Puzzle",    icon: "🔲", url: "https://poki.com/en/g/sudoku" },
-      { title: "Candy Crush",      cat: "Puzzle",    icon: "🍬", url: "https://poki.com/en/g/candy-crush-saga" },
-      { title: "Wordle",           cat: "Puzzle",    icon: "💬", url: "https://www.nytimes.com/games/wordle/index.html" },
-      { title: "Bubble Shooter",   cat: "Puzzle",    icon: "🫧", url: "https://poki.com/en/g/bubble-shooter" },
-      { title: "Mahjong",          cat: "Puzzle",    icon: "🀄", url: "https://poki.com/en/g/mahjong" },
-      { title: "Memory Cards",     cat: "Puzzle",    icon: "🃏", url: "https://poki.com/en/g/memory" },
-      { title: "Flow Free",        cat: "Puzzle",    icon: "🔗", url: "https://poki.com/en/g/flow-free" },
+{
+title:"Airport Sniper",
+category:"action",
+url:"https://cdn.htmlgames.com/AirportSniper/",
+image:"https://cdn.spiele-kostenlos-online.de/wp-content/uploads/airport-sniper-01-160x110.webp"
+},
 
-      // RACING
-      { title: "Highway Racer",    cat: "Racing",    icon: "🚗", url: "https://www.crazygames.com/game/highway-racer" },
-      { title: "Drift Racing",     cat: "Racing",    icon: "🏁", url: "https://poki.com/en/g/drift-racing" },
-      { title: "Moto X3M",         cat: "Racing",    icon: "🏍️", url: "https://poki.com/en/g/moto-x3m" },
-      { title: "Car Parking",      cat: "Racing",    icon: "🅿️", url: "https://poki.com/en/g/car-parking" },
-      { title: "Crazy Taxi",       cat: "Racing",    icon: "🚕", url: "https://poki.com/en/g/crazy-taxi" },
-      { title: "Road Fury",        cat: "Racing",    icon: "💥", url: "https://poki.com/en/g/road-fury" },
+{
+title:"Traffic Racer 2",
+category:"racing",
+url:"https://cdn.htmlgames.com/TrafficRacer2/",
+image:"https://www.aktionspiele.de/uploaded/game/screenshot/trafficracer2800480.webp"
+},
 
-      // ACTION
-      { title: "Stickman Hook",    cat: "Action",    icon: "🕷️", url: "https://poki.com/en/g/stickman-hook" },
-      { title: "Rooftop Snipers", cat: "Action",    icon: "🔫", url: "https://poki.com/en/g/rooftop-snipers" },
-      { title: "Getaway Shootout", cat: "Action",    icon: "💨", url: "https://poki.com/en/g/getaway-shootout" },
-      { title: "Tanks.io",         cat: "Action",    icon: "🔩", url: "https://poki.com/en/g/tanks-io" },
-      { title: "Krunker.io",       cat: "Action",    icon: "🎯", url: "https://krunker.io" },
-      { title: "Shell Shockers",   cat: "Action",    icon: "🥚", url: "https://shellshock.io" },
+{
+title:"SpacePinball",
+category:"racing",
+url:"https://cdn.htmlgames.com/SpacePinball/",
+image:"https://cdn.aptoide.com/imgs/1/b/1/1b1fa0c0dad30873323f0b001fc6e68e_icon.png?w=128"
+},
 
-      // ADVENTURE
-      { title: "Super Mario",      cat: "Adventure", icon: "⭐", url: "https://supermarioemulator.com" },
-      { title: "Among Us",         cat: "Adventure", icon: "👽", url: "https://poki.com/en/g/among-us" },
-      { title: "Sonic",            cat: "Adventure", icon: "⚡", url: "https://poki.com/en/g/sonic" },
-      { title: "Minecraft Classic", cat: "Adventure", icon: "⛏️", url: "https://classic.minecraft.net" },
-      { title: "Happy Wheels",     cat: "Adventure", icon: "🚲", url: "https://poki.com/en/g/happy-wheels" },
-      { title: "Bad Ice Cream",    cat: "Adventure", icon: "🍦", url: "https://poki.com/en/g/bad-ice-cream" }
-    ];
+{
+title:"Higher or Lower",
+category:"racing",
+url:"https://cdn.htmlgames.com/HigherOrLower/",
+image:"https://www.denkspiele.com/uploaded/game/screenshot/higherorLower800480.webp"
+},
+ 
+{
+title:"City Sniper",
+category:"racing",
+url:"https://cdn.htmlgames.com/CitySniper/",
+image:"https://www.sellmyapp.com/wp-content/uploads/featured_image63417aad1a69e.png"
+},
 
-    // ---- STATE ----
-    let activeCategory = "all";
-    let searchQuery = "";
+{
+title:"Thief Puzzle",
+category:"racing",
+url:"https://play.famobi.com/thief-puzzle",
+image:"/cache/data/image/game/thief-puzzle-f200x200.webp"
+},
 
-    // ---- CATEGORY NAV ----
-    function buildNav() {
-      const nav = document.getElementById("category-nav");
-      const allBtn = makeBtn("all", "🎮", "Alle", GAMES.length);
-      allBtn.classList.add("active");
-      nav.appendChild(allBtn);
+{
+title:"geometry dash",
+category:"racing",
+url:"https://gdbrowser.com",
+image:"/cache/data/image/game/thief-puzzle-f200x200.webp"
+},
 
-      CATEGORIES.forEach(c => {
-        const count = GAMES.filter(g => g.cat === c.id).length;
-        nav.appendChild(makeBtn(c.id, c.icon, c.label, count));
-      });
+{  
+title:"GalaxyShooter",
+category:"racing",
+url:"https://cdn.htmlgames.com/GalaxyShooter/",
+image:"/cache/data/image/game/thief-puzzle-f200x200.webp"
+},
 
-      nav.addEventListener("click", e => {
-        const btn = e.target.closest(".cat-btn");
-        if (!btn) return;
-        activeCategory = btn.dataset.cat;
-        document.querySelectorAll(".cat-btn").forEach(b => b.classList.toggle("active", b.dataset.cat === activeCategory));
-        render();
-      });
-    }
+{
+title:"bloxd.io",
+category:"io",
+url:"https://bloxd.io",
+image:"https://bloxd.io/favicon.ico"
+},
 
-    function makeBtn(id, icon, label, count) {
-      const b = document.createElement("button");
-      b.className = "cat-btn";
-      b.dataset.cat = id;
-      b.innerHTML = `<span class="icon">${icon}</span>${label}<span class="cat-count">${count}</span>`;
-      return b;
-    }
+{
+title:"veck.io",
+category:"io",
+url:"https://veck.io",
+image:"https://veck.io/favicon.ico"
+}
 
-    // ---- RENDER ----
-    function render() {
-      const q = searchQuery.toLowerCase();
-      const filtered = GAMES.filter(g => {
-        const catOk = activeCategory === "all" || g.cat === activeCategory;
-        const searchOk = !q || g.title.toLowerCase().includes(q) || g.cat.toLowerCase().includes(q);
-        return catOk && searchOk;
-      });
+,
+{
+title:"Flappy Bird",
+category:"arcade",
+url:"https://flappybird.io",
+image:"https://flappybird.io/favicon.ico"
+},
+{
+title:"Pac-Man",
+category:"arcade",
+url:"https://freepacman.org",
+image:"https://freepacman.org/favicon.ico"
+},
+{
+title:"Subway Surfers",
+category:"arcade",
+url:"https://poki.com/en/g/subway-surfers",
+image:"https://poki.com/favicon.ico"
+},
+{
+title:"Temple Run 2",
+category:"arcade",
+url:"https://poki.com/en/g/temple-run-2",
+image:"https://poki.com/favicon.ico"
+},
+{
+title:"2048",
+category:"puzzle",
+url:"https://play2048.co",
+image:"https://play2048.co/favicon.ico"
+},
+{
+title:"Tetris",
+category:"puzzle",
+url:"https://tetris.com/play-tetris",
+image:"https://tetris.com/favicon.ico"
+},
+{
+title:"Moto X3M",
+category:"racing",
+url:"https://poki.com/en/g/moto-x3m",
+image:"https://poki.com/favicon.ico"
+},
+{
+title:"Krunker.io",
+category:"action",
+url:"https://krunker.io",
+image:"https://krunker.io/favicon.ico"
+},
+{
+title:"Shell Shockers",
+category:"action",
+url:"https://shellshock.io",
+image:"https://shellshock.io/favicon.ico"
+},
+{
+title:"Minecraft Classic",
+category:"adventure",
+url:"https://classic.minecraft.net",
+image:"https://classic.minecraft.net/favicon.ico"
+}
 
-      document.getElementById("stat-visible").textContent = filtered.length;
+];
 
-      if (activeCategory !== "all") {
-        const cat = CATEGORIES.find(c => c.id === activeCategory);
-        document.getElementById("section-title").textContent = cat ? `${cat.icon} ${cat.label}` : activeCategory;
-        document.getElementById("section-sub").textContent = `${filtered.length} Spiele in dieser Kategorie`;
-      } else if (q) {
-        document.getElementById("section-title").textContent = `Suchergebnisse für „${q}"`;
-        document.getElementById("section-sub").textContent = `${filtered.length} Spiele gefunden`;
-      } else {
-        document.getElementById("section-title").textContent = "Alle Spiele";
-        document.getElementById("section-sub").textContent = "Klicke auf ein Spiel, um es sofort zu starten";
-      }
+// =====================
+// GAME START
+// =====================
 
-      const grid = document.getElementById("games-grid");
-      grid.innerHTML = "";
+function openGame(url){
+window.open(url, "_blank");
+}
 
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔎</div><h3>Keine Spiele gefunden</h3><p>Versuche einen anderen Suchbegriff oder wähle eine andere Kategorie.</p></div>`;
-        return;
-      }
+document.getElementById("closeGame").onclick = () => {
+document.getElementById("gameModal").style.display = "none";
+document.getElementById("gameDetail").innerHTML = "";
+};
 
-      filtered.forEach((game, i) => {
-        const card = document.createElement("div");
-        card.className = "game-card";
-        card.style.animationDelay = `${i * 0.04}s`;
+// =====================
+// SPIELE LADEN
+// =====================
 
-        const catInfo = CATEGORIES.find(c => c.id === game.cat) || {};
+function loadGames(){
 
-        card.innerHTML = `
-          <div class="card-thumb-placeholder">${game.icon}</div>
-          <div class="card-badge">${catInfo.icon || ""} ${game.cat}</div>
-          <div class="card-body">
-            <div class="card-title">${game.title}</div>
-            <div class="card-meta">Kostenlos spielbar · HTML5</div>
-            <button class="play-btn">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
-              Jetzt spielen
-            </button>
-          </div>
-        `;
+const container = document.getElementById("gamesContainer");
+container.innerHTML = "";
 
-        card.addEventListener("click", () => openGame(game));
-        grid.appendChild(card);
-      });
-    }
+games.forEach(game => {
 
-    // ---- GAME VIEWER ----
-    function openGame(game) {
-      const viewer = document.getElementById("game-viewer");
-      const iframe = document.getElementById("game-iframe");
-      const blockerLink = document.getElementById("blocker-link");
-      const openTabBtn = document.getElementById("open-tab-btn");
-      const blocker = document.getElementById("iframe-blocker");
+const div = document.createElement("div");
+div.className = "game-card";
 
-      document.getElementById("viewer-title").textContent = game.title;
-      openTabBtn.href = game.url;
-      blockerLink.href = game.url;
+div.innerHTML = `
+<img src="${game.image}" class="game-image" onerror="this.style.background='#333';this.style.display='block'">
+<h3>${game.title}</h3>
+<button class="play-btn">Spielen</button>
+`;
 
-      blocker.style.display = "none";
-      iframe.src = "";
-      setTimeout(() => { iframe.src = game.url; }, 50);
+div.onclick = () => openGame(game.url);
 
-      viewer.classList.add("open");
-      document.body.style.overflow = "hidden";
+container.appendChild(div);
 
-      // Show blocker after 4s if iframe likely blocked
-      const blockerTimer = setTimeout(() => {
-        try {
-          const doc = iframe.contentDocument;
-          if (!doc || doc.URL === "about:blank") blocker.style.display = "flex";
-        } catch (e) {
-          // cross-origin: assume it loaded
-        }
-      }, 4000);
+});
 
-      iframe._blockerTimer = blockerTimer;
-    }
+}
 
-    function closeGame() {
-      const viewer = document.getElementById("game-viewer");
-      const iframe = document.getElementById("game-iframe");
-      clearTimeout(iframe._blockerTimer);
-      iframe.src = "";
-      viewer.classList.remove("open");
-      document.body.style.overflow = "";
-    }
+document.addEventListener("DOMContentLoaded", loadGames);
 
-    // ---- EVENTS ----
-    document.getElementById("search").addEventListener("input", e => {
-      searchQuery = e.target.value;
-      render();
-    });
+</script>
 
-    document.getElementById("close-btn").addEventListener("click", closeGame);
 
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeGame();
-    });
+<!-- Google Login -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div style="padding:10px;text-align:center">
+<h2>The Game</h2>
+<input id="gameSearch" placeholder="Spiele suchen..." style="padding:8px;width:250px;">
+<div id="g_id_onload"
+ data-client_id="178460871252-cafs3vod4u35hmur61mo9teqqospu3es.apps.googleusercontent.com"
+ data-callback="handleCredentialResponse"></div>
+<div class="g_id_signin" data-type="standard"></div>
+<p id="userInfo"></p>
+</div>
+<script>
+function handleCredentialResponse(response){
+ document.getElementById('userInfo').innerText='Mit Google angemeldet!';
+}
+</script>
 
-    // ---- INIT ----
-    buildNav();
-    render();
-  </script>
+
+<style>
+#gameSearch{padding:8px;margin:10px}
+.catBtn{padding:6px 10px;margin:3px;cursor:pointer}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const s=document.getElementById('gameSearch');
+ if(s){
+  s.addEventListener('input',()=>{
+   document.querySelectorAll('.game-card,.game').forEach(g=>{
+    g.style.display=g.textContent.toLowerCase().includes(s.value.toLowerCase())?'':'none';
+   });
+  });
+ }
+});
+function calcMath(){
+ const v=document.getElementById('mathInput').value;
+ try{document.getElementById('mathOut').innerText=eval(v);}
+ catch(e){document.getElementById('mathOut').innerText='Fehler';}
+}
+</script>
+<div style="padding:10px;text-align:center">
+<h3>Mathe-KI</h3>
+<input id="mathInput" placeholder="2+2*5">
+<button onclick="calcMath()">Berechnen</button>
+<div id="mathOut"></div>
+</div>
+
 </body>
 </html>
